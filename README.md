@@ -1,6 +1,44 @@
 # Fileless Malware Detection Tool
 
-This repository contains code for a Fileless Malware Detection Tool designed to analyze files and system memory for potential fileless malware using AWS Lambda functions, EC2 instances, and machine learning models. 
+This project aims to develop a desktop application for detecting fileless malware, a type of malware that operates solely in system memory to evade traditional detection tools. Leveraging memory forensics, machine learning algorithms, and cloud computing, our solution provides real-time monitoring and analysis of system memory to identify indicators of fileless malware activity. The application offers a user-friendly interface for proactive protection against fileless malware attacks, empowering users to mitigate security risks effectively.
+
+## Screenshots of Desktop application
+
+### GUI Interface
+
+![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/795041ad-2b37-4cd7-b103-be86b78f9a63)
+This screenshot showcases the graphical user interface (GUI) of our application, providing users with an intuitive and user-friendly interface to interact with.
+### Uploading memory dumps
+
+![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/659842f2-f57d-443b-8d0e-aac1ed66550f)
+![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/a4fdf59c-762d-418f-99ad-96284af3547c)
+In this screenshot, users can see the uploading part of our application, where they can upload RAM Dump for analysis.
+### Prediction
+
+![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/83514415-bf62-419d-bb48-92f0cf909c97)
+This screenshot demonstrates the prediction part of our application, displaying the results or predictions generated based on the uploaded data.
+## Process flow
+
+The below image shows the process flow of our application.
+![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/440e934d-836d-4565-bfa6-f2b36febdbae)
+There are 4 main stages:
+### 1)Dataset collection
+
+In this stage, we gather the necessary data for training our machine learning model. We selected the dataset from [Kaggle](https://www.kaggle.com/datasets/luccagodoy/obfuscated-malware-memory-2022-cic), specifically the "Obfuscated Malware Memory 2022 (CIC)" dataset, which contains memory images of obfuscated malware samples. This dataset provides a diverse collection of memory images for training our model to detect fileless malware. It's essential to ensure the dataset is representative and sufficiently diverse to enable effective training.
+### 2)Machine Learning Model
+
+- **File**: `model.pkl` `Model_Training.ipynb`
+- **Algorithm used**: Random forest
+- **Purpose**: A trained machine learning model used for malware detection and prediction.
+- **Functionality**: Predicts whether a file contains malware or is benign based on extracted features.
+### 3) Feature Extraction
+
+In this stage, we extract features from memory dumps using the Volatility tool. These features serve as the columns in our dataset, capturing various aspects of the memory image relevant to identifying fileless malware. Feature extraction involves analyzing the memory dump to identify key characteristics and extracting them into a structured format suitable for predicting using our machine learning model. These features provide valuable insights into the runtime behavior of the system and serve as inputs to our model for effective detection of fileless malware.
+- **`bashscript.sh`**: Bash script for analyzing files using Volatility (a memory forensics tool).
+### 4) Using Trained Model for Prediction
+
+With the trained model and extracted features in hand, we can now use our model to make predictions on new or unseen data. This stage involves feeding the input data into the trained model and obtaining predictions or classifications based on the learned patterns from the training data.
+- **`predict.py`**: Python script for making predictions using the machine learning model.
 
 ## Lambda Functions
 
@@ -57,17 +95,6 @@ This repository contains code for a Fileless Malware Detection Tool designed to 
   - Displays analysis results to the user.
 - **Dependencies**: PyQt5
 
-## Machine Learning Model
-
-- **File**: `model.pkl`
-- **Purpose**: A trained machine learning model used for malware detection and prediction.
-- **Functionality**: Predicts whether a file contains malware or is benign based on extracted features.
-
-## Other Files
-
-- **`bashscript.sh`**: Bash script for analyzing files using Volatility.
-- **`predict.py`**: Python script for making predictions using the machine learning model.
-
 ## Usage
 
 1. Ensure proper configuration of AWS IAM roles, S3 bucket, EC2 instance, and Lambda functions.
@@ -78,6 +105,7 @@ This repository contains code for a Fileless Malware Detection Tool designed to 
 
 ## Memory Samples
 
+Below are few memory samples we used for testing our application.
 - [Memory Sample 1](https://drive.google.com/file/d/148Xx4mrBbEpbbeC3Uk3Zi0R0xcDrMQg_/view?usp=sharing)
 - [Memory Sample 2](https://drive.google.com/file/d/1CzTifXOpjYq4l3za7tStuvfU45EDwk6y/view?usp=sharing)
 - [Memory Sample 3](https://drive.google.com/file/d/1rnCSRI9ORWoieZLcTKydTjxEW_H5gHpT/view?usp=sharing)
