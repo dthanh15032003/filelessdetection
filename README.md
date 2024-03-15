@@ -1,26 +1,11 @@
 # Fileless Malware Detection Tool
 
 This project aims to develop a desktop application for detecting fileless malware, a type of malware that operates solely in system memory to evade traditional detection tools. Leveraging memory forensics, machine learning algorithms, and cloud computing, our solution provides real-time monitoring and analysis of system memory to identify indicators of fileless malware activity. The application offers a user-friendly interface for proactive protection against fileless malware attacks, empowering users to mitigate security risks effectively.
-
-## Screenshots of Desktop application
-
-### GUI Interface
-
-![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/795041ad-2b37-4cd7-b103-be86b78f9a63)
-This screenshot showcases the graphical user interface (GUI) of our application, providing users with an intuitive and user-friendly interface to interact with.
-### Uploading memory dumps
-
-![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/659842f2-f57d-443b-8d0e-aac1ed66550f)
-![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/a4fdf59c-762d-418f-99ad-96284af3547c)
-In this screenshot, users can see the uploading part of our application, where they can upload RAM Dump for analysis.
-### Prediction
-
-![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/83514415-bf62-419d-bb48-92f0cf909c97)
-This screenshot demonstrates the prediction part of our application, displaying the results or predictions generated based on the uploaded data.
 ## Process flow
 
 The below image shows the process flow of our application.
 ![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/440e934d-836d-4565-bfa6-f2b36febdbae)
+
 There are 4 main stages:
 ### 1)Dataset collection
 
@@ -109,3 +94,18 @@ Below are few memory samples we used for testing our application.
 - [Memory Sample 1](https://drive.google.com/file/d/148Xx4mrBbEpbbeC3Uk3Zi0R0xcDrMQg_/view?usp=sharing)
 - [Memory Sample 2](https://drive.google.com/file/d/1CzTifXOpjYq4l3za7tStuvfU45EDwk6y/view?usp=sharing)
 - [Memory Sample 3](https://drive.google.com/file/d/1rnCSRI9ORWoieZLcTKydTjxEW_H5gHpT/view?usp=sharing)
+## Screenshots of Desktop application
+
+### GUI Interface
+
+![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/795041ad-2b37-4cd7-b103-be86b78f9a63)
+This screenshot showcases the graphical user interface (GUI) of our application, providing users with an intuitive and user-friendly interface to interact with.
+### Uploading memory dumps
+
+![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/659842f2-f57d-443b-8d0e-aac1ed66550f)
+![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/a4fdf59c-762d-418f-99ad-96284af3547c)
+In this screenshot, users can see the uploading part of our application, where they can upload RAM Dump for analysis.
+### Prediction
+
+![image](https://github.com/sravyaravulakolla/QuadSquad/assets/122299844/83514415-bf62-419d-bb48-92f0cf909c97)
+This screenshot demonstrates the prediction part of our application, displaying the results or predictions generated based on the uploaded data.
