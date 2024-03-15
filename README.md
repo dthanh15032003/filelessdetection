@@ -75,3 +75,9 @@ This repository contains code for a Fileless Malware Detection Tool designed to 
 3. Lambda functions will automatically trigger file analysis on the EC2 instance.
 4. Use the frontend application to monitor the analysis progress and view results.
 5. Results will be stored in the S3 bucket.
+
+## Memory Samples
+
+- [Memory Sample 1](https://drive.google.com/file/d/148Xx4mrBbEpbbeC3Uk3Zi0R0xcDrMQg_/view?usp=sharing)
+- [Memory Sample 2](https://drive.google.com/file/d/1CzTifXOpjYq4l3za7tStuvfU45EDwk6y/view?usp=sharing)
+- [Memory Sample 3](https://drive.google.com/file/d/1rnCSRI9ORWoieZLcTKydTjxEW_H5gHpT/view?usp=sharing)
