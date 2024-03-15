@@ -1,0 +1,51 @@
+import json
+import time
+import boto3
+import os
+import urllib.parse
+
+def lambda_handler(event, context):
+    
+    instance_id = <ID>
+
+
+    ssm = boto3.client('ssm')
+    try:
+    
+        response = ssm.send_command(
+            InstanceIds=[instance_id],
+            DocumentName="AWS-RunShellScript",
+            Parameters={
+                'commands': ['cd /home/ubuntu/','python3 predict.py > r.txt']
+                           }
+        )
+
+        command_id = response["Command"]["CommandId"]
+
+        time.sleep(5)
+        response = ssm.send_command(
+            InstanceIds=[instance_id],
+            DocumentName="AWS-RunShellScript",
+            Parameters={
+                'commands': ['aws s3 cp /home/ubuntu/r.txt s3://divyareddybucket/result/r.txt']
+                           }
+        )
+        
+        
+        # Fetch the command output
+        output = ssm.get_command_invocation(CommandId=command_id, InstanceId=instance_id)
+
+        # Print the command output
+        print(output)
+        
+        print("Prediction done")
+
+        return {
+            'statusCode': 200,
+            'body': 'Files analized successfully'
+        }
+        
+    except Exception as e:
+        print(f"Error copying file: {e}")
+        return {"statusCode": 500, "body": json.dumps("Failed to delete.")}
+
