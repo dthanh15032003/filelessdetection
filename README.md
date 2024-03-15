@@ -1,6 +1,6 @@
-# Malware Detection System
+# Fireless Malware Detection Tool
 
-This repository contains code for a Malware Detection System designed to analyze files uploaded to an AWS S3 bucket. The system utilizes AWS Lambda functions, EC2 instances, and machine learning models to perform file analysis and detect potential malware.
+This repository contains code for a Fireless Malware Detection Tool designed to analyze files for potential malware using AWS Lambda functions, EC2 instances, and machine learning models.
 
 ## Lambda Functions
 
