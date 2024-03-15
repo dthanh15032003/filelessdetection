@@ -4,18 +4,13 @@ import boto3
 import json
 from flask import Flask, request, jsonify
 from flask import jsonify
+import os
 import time
 from botocore.exceptions import ClientError
 from flask import send_file
 app = Flask(__name__)
 
-
-import os
-
-
-
 s3 = boto3.client('s3')
-
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
