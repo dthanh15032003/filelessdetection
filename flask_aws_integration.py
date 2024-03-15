@@ -1,99 +1,105 @@
-import time
-import boto3
-from flask import Flask, jsonify
 
+from flask import Flask, request
+import boto3
+import json
+from flask import Flask, request, jsonify
+from flask import jsonify
+import time
+from botocore.exceptions import ClientError
+from flask import send_file
 app = Flask(__name__)
 
 
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-
-
-S3_BUCKET = os.environ.get('S3_BUCKET')
-S3_REGION = os.environ.get('S3_REGION')
-EC2_INSTANCE_IDF = os.environ.get('EC2_INSTANCE_ID_FLASK')
-EC2_INSTANCE_IDH = os.environ.get('EC2_INSTANCE_ID_HOST')
-EC2_USERNAME = os.environ.get('EC2_USERNAME')
+import os
 
 
 
-def get_ec2_instance_public_ip(instance_id):
-    ec2_client = boto3.client('ec2',
-                              aws_access_key_id=AWS_ACCESS_KEY_ID,
-                              aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-                              region_name=S3_REGION)
+s3 = boto3.client('s3')
 
-    # start_ec2_instance(instance_id)
-    ec2_client.start_instances(InstanceIds=[instance_id])
-    time.sleep(5)
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    S3_BUCKET = <YourBucketName>
+    folder_name='zipfile/'
+    file = request.files['file']
+
+    if file:
+        file_key=folder_name+file.filename
+        # Upload the file to S3 bucket
+        s3.upload_fileobj(file, S3_BUCKET, file_key)
+        return 'File uploaded successfully.'
+
+    return 'No file selected.'
+
+
+@app.route("/check_result")
+def check_result():
+    bucket_name = <YourBucketName>
+    file_key = 'result/r.txt'
     while True:
-        response = ec2_client.describe_instances(InstanceIds=[instance_id])
-
         try:
-            state = response['Reservations'][0]['Instances'][0]['State']['Name']
-            if state == 'running':
-                public_ip = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
-                if public_ip:
-                    return public_ip
-                else:
-                    print("Public IP address is not available yet.")
-            elif state == 'pending':
-                print("Instance is still in the pending state. Waiting...")
-                time.sleep(5)  # Delay for 5 seconds before checking again
+            s3.head_object(Bucket=bucket_name, Key=file_key)
+            response = s3.get_object(Bucket='divyareddybucket', Key='result/r.txt')
+            file_content = response['Body'].read().decode('utf-8')
+            print(file_content)
+            return file_content
+
+        except ClientError as e:
+            if e.response['Error']['Code'] == '404':
+                time.sleep(5)  # Delay for 5 seconds before the next search attempt
             else:
-                print(f"Instance is in {state} state. Unable to retrieve the public IP address.")
-                return None
-        except KeyError:
-            print("KeyError: Unable to retrieve the public IP address.")
-            print(response)  # Print the response for debugging purposes
-            return None
+                return False  # An error occurred while checking the file availability, return False
+        except Exception as e:
+            print(f"Error reading text file from S3: {e}")
+            return 'Error occurred while reading text file from S3'
 
 
+@app.route('/delete_files', methods=['POST'])
+def delete_files():
+    try:
+        bucket_name = <YourBucketName>
+        folder_name = 'result/'
+
+        # Create an S3 client using Boto3
+        s3_client = boto3.client('s3')
+
+        # List objects within the specified folder
+        response = s3_client.list_objects_v2(Bucket=bucket_name, Prefix=folder_name)
+
+        # Extract file keys to delete
+        objects_to_delete = [{'Key': obj['Key']} for obj in response.get('Contents', []) if obj['Key'] != folder_name]
+
+        if len(objects_to_delete) > 0:
+            # Delete the objects
+            s3_client.delete_objects(Bucket=bucket_name, Delete={'Objects': objects_to_delete})
+
+        return jsonify({'message': 'Files in the folder deleted successfully.'})
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 
-def start_ec2_instance(instance_id):
-    ec2_client = boto3.client('ec2',
-                              aws_access_key_id=AWS_ACCESS_KEY_ID,
-                              aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-                              region_name=S3_REGION)
-    response = ec2_client.start_instances(InstanceIds=[instance_id])
-    print(response)
+@app.route('/stop_ec2_inst', methods=['POST'])
+def stop_ec2_instance():
+    # Create an EC2 client using Boto3
+    ec2_client = boto3.client('ec2')
 
-def stop_ec2_instance(instance_id):
-    ec2_client = boto3.client('ec2',
-                              aws_access_key_id=AWS_ACCESS_KEY_ID,
-                              aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-                              region_name=S3_REGION)
-    response = ec2_client.stop_instances(InstanceIds=[instance_id])
-    print(response)
-
-@app.route('/start_instanceF', methods=['GET'])
-def start_instanceF():
-    start_ec2_instance(EC2_INSTANCE_IDF)
-    print("EC2 instance start request sent.")
-    return jsonify({'message': 'EC2 instance start request sent.'})
+    # Specify the instance ID of the EC2 instance you want to stop
+    instance_id = <ID>
+    try:
+        # Call the stop_instances API method to stop the EC2 instance
+        response = ec2_client.stop_instances(InstanceIds=[instance_id])
+        print("Stopped")
+        return response
+    except Exception as e:
+        print("Error")
+        return response
 
 
-@app.route('/stop_instanceF', methods=['GET'])
-def stop_instanceF():
-    ec2_client = boto3.client('ec2',
-                              aws_access_key_id=AWS_ACCESS_KEY_ID,
-                              aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-                              region_name=S3_REGION)
-    ec2_client.stop_instances(InstanceIds=[EC2_INSTANCE_IDF,EC2_INSTANCE_IDH])
-    return jsonify({'message': 'EC2 instance stop request sent.'})
-
-@app.route('/get_instance_ip', methods=['GET'])
-def get_instance_ip():
-    public_ip = get_ec2_instance_public_ip(EC2_INSTANCE_IDF)
-    if public_ip:
-        return jsonify({'ip': public_ip})
-    else:
-        return jsonify({'message': 'Unable to retrieve the EC2 instance IP.'})
 
 @app.route('/')
-def analyse1():
-    return "<p>hi there</p>"
+def stop():
+        return "<p> Hello <p/>"
 
 if __name__ == '__main__':
     app.run()
