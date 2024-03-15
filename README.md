@@ -1,6 +1,6 @@
-# Fireless Malware Detection Tool
+# Fileless Malware Detection Tool
 
-This repository contains code for a Fireless Malware Detection Tool designed to analyze files for potential malware using AWS Lambda functions, EC2 instances, and machine learning models.
+This repository contains code for a Fileless Malware Detection Tool designed to analyze files for potential malware using AWS Lambda functions, EC2 instances, and machine learning models.
 
 ## Lambda Functions
 
